@@ -1,12 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { camelCase } from 'lodash';
-import { SelectableBox, Icon } from '@edx/paragon';
+import { SelectableBox, Icon, StatefulButton } from '@edx/paragon';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { fetchLiveData, saveLiveConfiguration, saveLiveConfigurationAsDraft } from './data/thunks';
-import { selectApp } from './data/slice';
+import {
+  configureZoomGlobalSettings,
+  fetchLiveData, saveLiveConfiguration,
+  saveLiveConfigurationAsDraft,
+} from './data/thunks';
+import { selectApp, updateIsZoomGlobalCredSet } from './data/slice';
 import AppSettingsModal from '../app-settings-modal/AppSettingsModal';
 import { useModel } from '../../generic/model-store';
 import Loading from '../../generic/Loading';
@@ -20,9 +24,11 @@ const LiveSettings = ({
   intl,
   onClose,
 }) => {
+  const [isZoomBtnClicked, setIsZoomBtnClicked] = useState(false);
   const dispatch = useDispatch();
   const courseId = useSelector(state => state.courseDetail.courseId);
   const availableProviders = useSelector((state) => state.live.appIds);
+  const isZoomGlobalCredSet = useSelector((state) => state.live.isZoomGlobalCredSet);
   const {
     piiSharingAllowed, selectedAppId, enabled, status,
   } = useSelector(state => state.live);
@@ -70,9 +76,18 @@ const LiveSettings = ({
     await dispatch(saveLiveConfiguration(courseId, values));
   };
 
+  const configureZoomGlobalSettingsIfExists = async (id) => {
+    await dispatch(configureZoomGlobalSettings(id));
+  };
+
   useEffect(() => {
+    if (!isZoomGlobalCredSet && isZoomBtnClicked) {
+      configureZoomGlobalSettingsIfExists(courseId);
+      setIsZoomBtnClicked(false);
+      dispatch(updateIsZoomGlobalCredSet({ isZoomGlobalCredSet: true }));
+    }
     dispatch(fetchLiveData(courseId));
-  }, [courseId]);
+  }, [courseId, isZoomBtnClicked]);
 
   return (
     <AppSettingsModal
@@ -91,36 +106,51 @@ const LiveSettings = ({
       {({ values, setFieldValue }) => (
         (status === RequestStatus.IN_PROGRESS) ? (
           <Loading />
-            ) : (
+        ) : (
+          <>
+            <h4 className="my-3">{intl.formatMessage(messages.selectProvider)}</h4>
+            <SelectableBox.Set
+              type="checkbox"
+              value={values.provider}
+              onChange={(event) => handleProviderChange(event.target.value, setFieldValue, values)}
+              name="provider"
+              columns={3}
+              className="mb-3"
+            >
+              {availableProviders.map((provider) => (
+                <SelectableBox value={provider} type="checkbox" key={provider}>
+                  <div className="d-flex flex-column align-items-center">
+                    <Icon src={iconsSrc[`${camelCase(provider)}`]} alt={provider} />
+                    <span>{intl.formatMessage(messages[`appName-${camelCase(provider)}`])}</span>
+                  </div>
+                </SelectableBox>
+              ))}
+            </SelectableBox.Set>
+            {values.provider === 'zoom' ? (
               <>
-                <h4 className="my-3">{intl.formatMessage(messages.selectProvider)}</h4>
-                <SelectableBox.Set
-                  type="checkbox"
-                  value={values.provider}
-                  onChange={(event) => handleProviderChange(event.target.value, setFieldValue, values)}
-                  name="provider"
-                  columns={3}
-                  className="mb-3"
-                >
-                  {availableProviders.map((provider) => (
-                    <SelectableBox value={provider} type="checkbox" key={provider}>
-                      <div className="d-flex flex-column align-items-center">
-                        <Icon src={iconsSrc[`${camelCase(provider)}`]} alt={provider} />
-                        <span>{intl.formatMessage(messages[`appName-${camelCase(provider)}`])}</span>
-                      </div>
-                    </SelectableBox>
-                  ))}
-                </SelectableBox.Set>
-                {values.provider === 'zoom' ? <ZoomSettings values={values} />
-                  : (
-                    <BBBSettings
-                      values={values}
-                      setFieldValue={setFieldValue}
-                    />
-                  )}
+                <ZoomSettings values={values} />
+                {!isZoomGlobalCredSet && (
+                  <StatefulButton
+                    name="zoom.global.creds.btn"
+                    id="zoom.global.creds.btn"
+                    variant="brand"
+                    state="default"
+                    labels={{
+                      default: intl.formatMessage(
+                        messages['zoom.global.creds.btn'],
+                      ),
+                      pending: '',
+                    }}
+                    onClick={() => setIsZoomBtnClicked(true)}
+                  />
+                )}
               </>
-            )
-          )}
+            ) : (
+              <BBBSettings values={values} setFieldValue={setFieldValue} />
+            )}
+          </>
+        )
+      )}
     </AppSettingsModal>
   );
 };
