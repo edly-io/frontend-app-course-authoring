@@ -1,11 +1,12 @@
 import { history } from '@edx/frontend-platform';
 import { addModel, addModels, updateModel } from '../../../generic/model-store';
 import {
- getLiveConfiguration,
- getLiveProviders,
- postLiveConfiguration,
- normalizeSettings,
- deNormalizeSettings,
+  configureZoomGlobalSettingsIfExists,
+  getLiveConfiguration,
+  getLiveProviders,
+  postLiveConfiguration,
+  normalizeSettings,
+  deNormalizeSettings,
 } from './api';
 import { loadApps, updateStatus, updateSaveStatus } from './slice';
 import { RequestStatus } from '../../../data/constants';
@@ -63,6 +64,25 @@ export function saveLiveConfiguration(courseId, config) {
       const apps = await postLiveConfiguration(courseId, config);
       dispatch(updateLiveSettingsState(apps));
 
+      dispatch(updateSaveStatus({ status: RequestStatus.SUCCESSFUL }));
+      history.push(`/course/${courseId}/pages-and-resources/`);
+    } catch (error) {
+      if (error.response && error.response.status === 403) {
+        dispatch(updateSaveStatus({ status: RequestStatus.DENIED }));
+        dispatch(updateStatus({ status: RequestStatus.DENIED }));
+      } else {
+        dispatch(updateSaveStatus({ status: RequestStatus.FAILED }));
+      }
+    }
+  };
+}
+
+export function configureZoomGlobalSettings(courseId) {
+  return async (dispatch) => {
+    dispatch(updateSaveStatus({ status: RequestStatus.IN_PROGRESS }));
+    try {
+      const apps = await configureZoomGlobalSettingsIfExists(courseId);
+      dispatch(updateLiveSettingsState(apps));
       dispatch(updateSaveStatus({ status: RequestStatus.SUCCESSFUL }));
       history.push(`/course/${courseId}/pages-and-resources/`);
     } catch (error) {
