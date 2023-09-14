@@ -129,7 +129,7 @@ const LiveSettings = ({
             {values.provider === 'zoom' ? (
               <>
                 <ZoomSettings values={values} />
-                {!isZoomGlobalCredSet && (
+                {!isZoomGlobalCredSet && values.piiSharingEnable && (
                   <StatefulButton
                     name="zoom.global.creds.btn"
                     id="zoom.global.creds.btn"
