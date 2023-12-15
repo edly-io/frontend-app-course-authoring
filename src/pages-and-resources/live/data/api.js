@@ -126,7 +126,8 @@ export async function postLiveConfiguration(courseId, config) {
 }
 
 export async function configureZoomGlobalSettingsIfExists(courseId) {
-  await getAuthenticatedHttpClient().post(
+  const data = await getAuthenticatedHttpClient().post(
     `${zoomConfigurationApiUrl}/${courseId}/`,
   );
+  return (data && data.data && data.data.global_zoom_creds_enabled) || false;
 }

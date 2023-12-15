@@ -8,7 +8,12 @@ import {
   normalizeSettings,
   deNormalizeSettings,
 } from './api';
-import { loadApps, updateStatus, updateSaveStatus } from './slice';
+import {
+  loadApps,
+  updateStatus,
+  updateSaveStatus,
+  updateIsZoomGlobalCredSet,
+} from './slice';
 import { RequestStatus } from '../../../data/constants';
 
 function updateLiveSettingsState({
@@ -81,17 +86,12 @@ export function configureZoomGlobalSettings(courseId) {
   return async (dispatch) => {
     dispatch(updateSaveStatus({ status: RequestStatus.IN_PROGRESS }));
     try {
-      const apps = await configureZoomGlobalSettingsIfExists(courseId);
-      dispatch(updateLiveSettingsState(apps));
-      dispatch(updateSaveStatus({ status: RequestStatus.SUCCESSFUL }));
-      history.push(`/course/${courseId}/pages-and-resources/`);
+      const isZoomGlobalCredEnabled = await configureZoomGlobalSettingsIfExists(
+        courseId,
+      );
+      dispatch(updateIsZoomGlobalCredSet(isZoomGlobalCredEnabled));
     } catch (error) {
-      if (error.response && error.response.status === 403) {
-        dispatch(updateSaveStatus({ status: RequestStatus.DENIED }));
-        dispatch(updateStatus({ status: RequestStatus.DENIED }));
-      } else {
-        dispatch(updateSaveStatus({ status: RequestStatus.FAILED }));
-      }
+      dispatch(updateIsZoomGlobalCredSet(false));
     }
   };
 }
