@@ -100,7 +100,7 @@ const StatusBar = ({
           </Hyperlink>
         </StatusBarItem>
         <StatusBarItem title={intl.formatMessage(messages.pacingTypeTitle)}>
-          <span className="small">
+          <span className="small dark-black-color">
             {isSelfPaced
               ? intl.formatMessage(messages.pacingTypeSelfPaced)
               : intl.formatMessage(messages.pacingTypeInstructorPaced)}
@@ -122,7 +122,7 @@ const StatusBar = ({
                 {intl.formatMessage(messages.highlightEmailsEnabled)}
               </span>
             ) : (
-              <Button data-testid="highlights-enable-button" size="sm" onClick={openEnableHighlightsModal}>
+              <Button data-testid="highlights-enable-button" className="purple-bg border-purple-color"  size="sm" onClick={openEnableHighlightsModal}>
                 {intl.formatMessage(messages.highlightEmailsButton)}
               </Button>
             )}

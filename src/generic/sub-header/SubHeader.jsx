@@ -14,8 +14,8 @@ const SubHeader = ({
   hideBorder,
   withSubHeaderContent,
 }) => (
-  <div className={`${!hideBorder && 'border-bottom border-light-400'} mb-3`}>
-    <header className="sub-header">
+  <div className={`${!hideBorder && 'border-bottom border-light-400 pt-3'} mb-3`}>
+    <header className="sub-header subheaderWrapper">
       <h2 className="sub-header-title">
         <small className="sub-header-title-subtitle">{subtitle}</small>
         {breadcrumbs && (

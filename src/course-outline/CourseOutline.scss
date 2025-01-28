@@ -8,3 +8,18 @@
 @import "./highlights-modal/HighlightsModal";
 @import "./publish-modal/PublishModal";
 @import "./xblock-status/XBlockStatus";
+
+
+.courseOutlineWrapper{
+    .alert-info{
+        background-color: #F9F9F9;
+        border: 1px solid #F3F3F3;
+        box-shadow: unset;
+        .btn-primary{
+            background-color: #4600c7 !important;
+        }
+        .btn-tertiary{
+            color: #111827 !important;
+        }
+    }
+}

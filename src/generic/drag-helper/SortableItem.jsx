@@ -45,11 +45,11 @@ const SortableItem = ({
     zIndex: isDragging ? 200 : undefined,
     transform: CSS.Translate.toString(transform),
     transition,
-    background: 'white',
+    background: '#FBFBFB',
     padding: '1rem 1.5rem',
     marginBottom: '1.5rem',
-    borderRadius: '0.35rem',
-    boxShadow: '0 0 .125rem rgba(0, 0, 0, .15), 0 0 .25rem rgba(0, 0, 0, .15)',
+    borderRadius: '5.6px',
+    // boxShadow: '0 0 .125rem rgba(0, 0, 0, .15), 0 0 .25rem rgba(0, 0, 0, .15)',
     ...componentStyle,
   };
 
@@ -57,9 +57,9 @@ const SortableItem = ({
     <Row
       ref={setNodeRef}
       style={style}
-      className="mx-0"
+      className="mx-0 border-1 cardsStyle"
     >
-      <Col className="extend-margin px-0">
+      <Col className="extend-margin extendCardWrapper px-0">
         {children}
       </Col>
       {isDraggable && (

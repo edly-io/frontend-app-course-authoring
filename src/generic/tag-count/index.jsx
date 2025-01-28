@@ -13,7 +13,7 @@ const TagCount = ({ count, onClick }) => {
 
   return (
     <div className={
-      classNames('generic-tag-count d-flex', { 'zero-count': count === 0 })
+      classNames('generic-tag-count d-flex dark-black-color ', { 'zero-count': count === 0 })
     }
     >
       { onClick ? (

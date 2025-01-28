@@ -104,7 +104,7 @@ const CardHeader = ({
   return (
     <>
       <div
-        className="item-card-header"
+        className="item-card-header headerWrapper"
         data-testid={`${namePrefix}-card-header`}
         ref={cardHeaderRef}
       >
@@ -138,7 +138,7 @@ const CardHeader = ({
             />
           </>
         )}
-        <div className="ml-auto d-flex">
+        <div className="ml-auto d-flex actionBtnWrapper">
           {(isVertical || isSequential) && (
             <CardStatus status={status} showDiscussionsEnabledBadge={showDiscussionsEnabledBadge} />
           )}

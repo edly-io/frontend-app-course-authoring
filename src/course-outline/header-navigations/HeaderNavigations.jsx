@@ -39,6 +39,7 @@ const HeaderNavigations = ({
             iconBefore={IconAdd}
             onClick={handleNewSection}
             disabled={errors?.outlineIndexApi}
+            className="purple-bg"
           >
             {intl.formatMessage(messages.newSectionButton)}
           </Button>
@@ -58,6 +59,7 @@ const HeaderNavigations = ({
             data-testid="course-reindex"
             variant="outline-primary"
             disabled={isDisabledReindexButton}
+            className="border-purple-color dark-black-color"
           >
             {intl.formatMessage(messages.reindexButton)}
           </Button>
@@ -68,6 +70,7 @@ const HeaderNavigations = ({
           variant="outline-primary"
           iconBefore={isSectionsExpanded ? ArrowUpIcon : ArrowDownIcon}
           onClick={handleExpandAll}
+             className="border-purple-color dark-black-color"
         >
           {isSectionsExpanded
             ? intl.formatMessage(messages.collapseAllButton)
@@ -86,6 +89,7 @@ const HeaderNavigations = ({
           href={lmsLink}
           target="_blank"
           variant="outline-primary"
+             className="border-purple-color dark-black-color"
         >
           {intl.formatMessage(messages.viewLiveButton)}
         </Button>

@@ -228,7 +228,7 @@ const SectionCard = ({
                 variant="tertiary"
                 onClick={handleOpenHighlightsModal}
               >
-                <Bubble className="mr-1">
+                <Bubble className="mr-1 dark-black-bg">
                   {highlights.length}
                 </Bubble>
                 <p className="m-0 text-black">{messages.sectionHighlightsBadge.defaultMessage}</p>

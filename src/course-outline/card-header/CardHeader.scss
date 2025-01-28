@@ -7,14 +7,14 @@
     padding: 0;
     width: fit-content;
     height: 1.5rem;
-    margin-right: .25rem;
+    margin-right: 0.25rem;
     background: transparent;
     color: $black;
   }
 
   .item-card-edit-icon {
     opacity: 0;
-    transition: opacity .3s linear;
+    transition: opacity 0.3s linear;
 
     &:focus {
       opacity: 1;
@@ -24,6 +24,40 @@
   &:hover {
     .item-card-edit-icon {
       opacity: 1;
+    }
+  }
+}
+
+.purple-bg {
+  background-color: #4600c7 !important;
+}
+.dark-black-color {
+  color: #111827 !important;
+}
+
+.actionBtnWrapper {
+  .item-card-header__menu {
+    color: #111827 !important;
+    &:hover {
+      background-color: #4600c7 !important;
+      color: white !important;
+    }
+  }
+  .btn-icon-md {
+    color: #111827 !important;
+    &:hover {
+      background-color: #4600c7 !important;
+      color: white !important;
+    }
+  }
+}
+.headerWrapper {
+  .item-card-edit-icon {
+    color: #4600c7 !important;
+    border-color: #4600c7 !important;
+    &:hover {
+      color: white !important;
+      background-color: #4600c7 !important;
     }
   }
 }
